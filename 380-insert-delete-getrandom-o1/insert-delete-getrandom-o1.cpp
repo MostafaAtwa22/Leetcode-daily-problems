@@ -1,50 +1,40 @@
+#include <iostream>
+#include <unordered_map>
+#include <vector>
+#include <random>
+
 class RandomizedSet {
 public:
-    unordered_map<int, int> mp;
-    vector<int> a;
-    int last = 0;
-    RandomizedSet() {
-        
-    }
-    
-    bool insert(int val) {
-        if (mp[val])
-            return false;
-        last++;
-        a.push_back(val);
-        mp[val] = last;
-        return true;
-    }
-    
-    bool remove(int val) {
-        if (!mp[val])
-            return false;
-        if (mp[val] != last)
-        {
-            a[mp[val] - 1] = a[last - 1];
-            mp[a[last - 1]] = mp[val];
-        }
-        a.pop_back();
-        mp[val] = 0;
-        last--;
-        return true;
-    }
-    
-    int getRandom() {
-        random_device rd;
-        mt19937 gen(rd());
-        uniform_int_distribution<> distr(0, a.size() - 1);
+    std::unordered_map<int, int> mp;
+    std::vector<int> a;
 
-        int random_index = distr(gen);
-        int random_value = a[random_index];
-        return random_value;
+    RandomizedSet() {}
+
+    bool insert(int val) {
+        if (mp.find(val) != mp.end())
+            return false;
+        a.push_back(val);
+        mp[val] = a.size() - 1;
+        return true;
+    }
+
+    bool remove(int val) {
+        if (mp.find(val) == mp.end())
+            return false;
+
+        int index = mp[val];
+        int last_element = a.back();
+
+        a[index] = last_element;
+        mp[last_element] = index;
+
+        a.pop_back();
+        mp.erase(val);
+
+        return true;
+    }
+
+    int getRandom() {
+        return a[rand() % a.size()];
     }
 };
-
-/**
- * Your RandomizedSet object will be instantiated and called as such:
- * RandomizedSet* obj = new RandomizedSet();
- * bool param_1 = obj->insert(val);
- * bool param_2 = obj->remove(val);
- * int param_3 = obj->getRandom();
- */
