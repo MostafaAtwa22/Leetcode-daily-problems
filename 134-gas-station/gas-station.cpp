@@ -31,7 +31,6 @@ public:
         for (int i = 0; i < n; i++)
         {
             total += a[i];
-            cout << total << '\n';
             if (total < 0)
             {
                 total = 0;
