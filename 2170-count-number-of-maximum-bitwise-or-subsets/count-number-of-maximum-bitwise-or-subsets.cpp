@@ -1,19 +1,21 @@
 class Solution {
 public:
-    int count(int i, int n, int sum, vector<int> & a) {
-        if (i == a.size()) {
-            if (sum == n)
-                return 1;
-            return 0;
-        }
-        return count(i + 1, (n | a[i]), sum, a) + count(i + 1, (n), sum, a);
-    }
-    
     int countMaxOrSubsets(vector<int>& a) {
         int n = a.size();
-        int sum = 0;
-        for (auto i : a)
-            sum |= i;
-        return count(0, 0, sum, a);
+        unordered_map<int, int> mp;
+        int mx = 0;
+        for (int i = 1; i < (1 << n); i++) {
+            int msk = i;
+            int res = 0;
+            for (int j = 0; j < n; j++) {
+                if (msk & 1) {
+                    res |= a[j];
+                    mx = max(mx, res);
+                }
+                msk >>= 1;
+            }
+            mp[res]++;
+        }
+        return mp[mx];
     }
 };
