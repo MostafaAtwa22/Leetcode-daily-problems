@@ -3,29 +3,18 @@ public:
     int longestSubarray(vector<int>& a) {
         int n = a.size();
         int ans = 0;
-        bool flg = false;
-        bool one = false;
-        for (int i = 0; i < n; i++) {
-            if (a[i])
-                one = true;
-            else
-                flg = true;
-
-            int cnt = 0;
-            if (!a[i]) {
-                int j = i - 1;
-                while (j >= 0 && a[j--]) {
-                    cnt++;
-                }
-                j = i + 1;
-                while (j < n && a[j++]) {
-                    cnt++;
-                }
+        int l = 0;
+        int zero = 0;
+        for (int r = 0; r < n; r++) {
+            if (!a[r])
+                zero++;
+            while (zero > 1) {
+                if (!a[l])
+                    zero--;
+                l++;
             }
-            ans = max(ans, cnt);
+            ans = max(ans, r - l);
         }
-        if (!one)
-            return 0;
-        return flg ? ans : n - 1;
+        return ans;
     }
 };
