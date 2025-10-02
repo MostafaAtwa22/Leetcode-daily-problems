@@ -3,7 +3,6 @@ public:
     int maxBottlesDrunk(int b, int e) {
         int empty = 0, ans = 0;
         while (empty + b >= e) {
-            cout << b << ' ' << empty << ' ' << e << ' ' << ans << '\n';
             ans += b;
             empty += b;
             b = 0;
