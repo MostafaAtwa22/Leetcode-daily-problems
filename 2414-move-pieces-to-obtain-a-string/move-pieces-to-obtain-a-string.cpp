@@ -16,9 +16,8 @@ public:
                 return false;
             else if (start[i] == 'R' && j < i)
                 return false;
-            cout << i << ' ' << j << '\n';
             i++, j++;
         }
-        return i == j;
+        return true;
     }
 };
