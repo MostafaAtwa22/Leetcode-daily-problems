@@ -12,15 +12,10 @@ public:
             else if (s[i] == '0') {
                 z++;
             }
-            if (i == n - 1 && z && o) {
-                cout << i << " => " << z << ' ' << o << '\n';
-                int x = min(o, z);
-                cnt += x;
-            }
+            if (i == n - 1 && z && o) 
+                cnt += min(o, z);
             else if (i < n - 1 && z && o && s[i] != s[i + 1]) {
-                cout << i << " => " << z << ' ' << o << '\n';
-                int x = min(o, z);
-                cnt += x;
+                cnt += min(o, z);
                 if (s[i + 1] == '0')
                     z = 0;
                 else
