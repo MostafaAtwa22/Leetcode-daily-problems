@@ -1,11 +1,14 @@
 class Solution {
 public:
     int findDuplicate(vector<int>& a) {
-        sort(a.begin(), a.end());
-        for (int i = 1; i < a.size(); i++) {
-            if (a[i] == a[i - 1])
+        int n = a.size();
+        vector<bool> freq(n, false);
+        for (int i = 0; i < n; i++)
+        {
+            if (freq[a[i]])
                 return a[i];
+            freq[a[i]] = true;
         }
-        return a[0];
+        return a[n - 1];
     }
 };
