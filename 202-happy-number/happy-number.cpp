@@ -11,9 +11,11 @@ public:
         return ans;
     }
     bool isHappy(int n) {
-        for (int i = 0; i < 100; i++) {
+        unordered_map<int, bool> mp;
+        while (mp.find(n) == mp.end()) {
             if (n == 1)
                 return true;
+            mp[n] = true;
             n = sum(n);
         }
         return false;
