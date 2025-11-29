@@ -6,10 +6,8 @@ public:
         int start = a[0][0], end = a[0][1];
         vector<vector<int>> ans;
         for (int i = 1; i < n; i++) {
-            if (a[i][0] >= start && a[i][0] <= end) {
-                if (end < a[i][1])
-                    end = a[i][1];
-            }
+            if (a[i][0] >= start && a[i][0] <= end) 
+                end = max(end, a[i][1]);
             else {
                 ans.push_back({start, end});
                 start = a[i][0], end = a[i][1];
