@@ -10,14 +10,10 @@
  * };
  */
 class Solution {
-private: 
-    int helper(TreeNode* root) {
-        if (!root)
-            return 1;
-        return helper(root->left) + helper(root->right);
-    }
 public:
     int countNodes(TreeNode* root) {
-        return helper(root) - 1;
+        if (!root)
+            return 0;
+        return 1 + countNodes(root->left) + countNodes(root->right);
     }
 };
