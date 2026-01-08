@@ -1,17 +1,20 @@
 class Solution {
 public:
-    vector<vector<int>> subsets(vector<int>& a) {
-        vector<vector<int>> ans;
-        seq(a, 0, {}, ans);
-        return ans;
-    }
-    void seq(vector<int> & a, int i, vector<int> v, vector<vector<int>> & ans) {
-        if (i == a.size()) {
-            ans.push_back(v);
-            return;
+    vector<vector<int>> subsets(vector<int>& arr) {
+        int n = arr.size();
+        vector<vector<int>> res;
+        
+        for (int i = 0; i < (1 << n); i++) {
+            vector<int> subset;
+            for (int j = 0; j < n; j++) {
+                if ((i & (1 << j)) != 0) {
+                    subset.push_back(arr[j]);
+                }
+            }
+            
+            res.push_back(subset);
         }
-        seq(a, i + 1, v, ans);
-        v.push_back(a[i]);
-        seq(a, i + 1, v, ans);
+        
+        return res;
     }
 };
