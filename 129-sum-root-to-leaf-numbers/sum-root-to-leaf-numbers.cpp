@@ -10,23 +10,18 @@
  * };
  */
 class Solution {
-void sum(TreeNode * root, string s, int& ans) {
+int sum(TreeNode * root, int s) {
     if (!root) {
-        return;
+        return 0;
     }
+    s = s * 10 + root->val;
     if (!root->left && !root->right) {
-        s += (root->val + '0');
-        ans += stoi(s);
-        cout << s << ' ' << ans << '\n';
+        return s;
     }
-    s += root->val + '0';
-    sum(root->left, s, ans);
-    sum(root->right, s, ans);
+    return sum(root->left, s) + sum(root->right, s);
 }
 public:
-    int sumNumbers(TreeNode* root) {
-        int ans = 0;
-        sum(root, "", ans);
-        return ans;
+    int sumNumbers(TreeNode* root) {        
+        return sum(root, 0);
     }
 };
