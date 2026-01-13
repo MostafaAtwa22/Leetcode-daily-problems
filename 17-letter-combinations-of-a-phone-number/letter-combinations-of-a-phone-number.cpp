@@ -1,9 +1,8 @@
 class Solution {
     vector<string> a;
     vector<string> ans;
-    void BT (string s, int i, string str) {
+    void BT (string& s, int i, string str) {
         if (i == s.size()) {
-            cout << str << '\n';
             if (str.size() == s.size())
                 ans.push_back(str);
             return;
