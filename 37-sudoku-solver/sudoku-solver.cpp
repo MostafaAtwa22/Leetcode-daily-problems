@@ -1,53 +1,45 @@
 class Solution {
-	unsigned Row[9]={0};
-    unsigned Col[9]={0};
-    unsigned Block[9]={0};
-    vector<pair<char, char>> uncertain;
-public:
-    void set3Cond(int i, int j,  int x){
-        const int x2=1<<x;
-		Row[i]|=x2;
-        Col[j]|=x2;
-        const int bidx=(i/3)*3 +j/3;
-        Block[bidx]|=x2;
-	}
+bool isSafe(vector<vector<char>> & a, int r, int c, char n) {
+    for (int i = 0; i < 9; i++) {
+        if (a[i][c] == n)
+            return false;
+        if (a[r][i] == n)
+            return false;
+    }
 
-    void setup(vector<vector<char>>& board) {
-        uncertain.reserve(81);
-        for (int i=0; i<9; i++) {
-            for (int j=0; j< 9; j++) {
-                char c=board[i][j];
-                if ( c== '.') {
-                    uncertain.emplace_back(i, j);
-                }
-                else {
-                    set3Cond(i, j, c-'1');
+    int row = r - (r % 3);
+    int col = c - (c % 3);
+    for (int i = row; i < row + 3; i++) {
+        for (int j = col; j < col + 3; j++) {
+            if (a[i][j] == n)
+                return false;
+        }
+    }
+    return true;
+}
+public:
+    bool sol(vector<vector<char>> & a) {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (a[i][j] == '.') {
+                    for (char num = '1'; num <= '9'; num++) {
+                        if (isSafe(a, i, j, num)) {
+                            // do
+                            a[i][j] = num;
+                            // rec 
+                            if(sol(a))
+                                return true;
+                            // undo
+                            a[i][j] = '.';
+                        }
+                    }
+                    return false;
                 }
             }
         }
+        return true;
     }
-
-    bool solve(vector<vector<char>>& board, int idx) {
-        if (idx==uncertain.size()) return 1; 
-        auto [i, j]=uncertain[idx];
-        const int  bidx=(i/3)*3 +j/3;
-        unsigned notMask=~(Row[i]|Col[j]|Block[bidx]) & 0b111111111;
-        unsigned Bit=0;
-        for (; notMask; notMask^=Bit) {
-            Bit=bit_floor(notMask);
-            const int x=countr_zero(Bit);
-
-            board[i][j]='1'+x;
-            Row[i]|=Bit; Col[j]|=Bit; Block[bidx]|=Bit;
-            if (solve(board, idx+1)) return 1;
-            Row[i]^=Bit; Col[j]^=Bit; Block[bidx]^=Bit;// backtracking
-            board[i][j]='.';
-        }
-        return 0; 
-    }
-
-    void solveSudoku(vector<vector<char>>& board) {
-        setup(board);
-        solve(board, 0);
+    void solveSudoku(vector<vector<char>>& a) {
+        sol(a);
     }
 };
