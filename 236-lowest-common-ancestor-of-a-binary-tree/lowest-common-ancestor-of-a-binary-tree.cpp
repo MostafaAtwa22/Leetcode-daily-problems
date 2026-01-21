@@ -23,7 +23,6 @@ public:
             return;
         int cnt = 2;
         check(root, p, q, cnt);
-        cout << root->val << " => " << cnt << '\n';
         if (cnt == 0)
             ans = root;
         pre(root->left, p, q);
