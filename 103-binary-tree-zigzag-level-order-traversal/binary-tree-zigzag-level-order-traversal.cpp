@@ -18,21 +18,21 @@ public:
         queue<TreeNode*> q;
         q.push(root);
         TreeNode * node;
-        bool flg = false;
+        bool flg = true;
         while(!q.empty()) {
             int n = q.size();
-            vector<int> a;
+            vector<int> a(n);
             for (int i = 0; i < n; i++) {
                 node = q.front();
                 q.pop();
-                a.push_back(node->val);
+                int idx = flg ? i : n - 1 - i;
+                a[idx] = node->val;
                 if (node->left)
                     q.push(node->left);
                 if (node->right)
                     q.push(node->right);
             }
-            if (flg)
-                reverse(a.begin(), a.end());
+
             flg = !flg;
             ans.push_back(a);
         }
