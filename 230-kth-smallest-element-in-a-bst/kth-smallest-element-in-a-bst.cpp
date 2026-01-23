@@ -17,7 +17,6 @@ public:
             return;
         pre(root->left, k, val);
         cnt++;
-        cout << cnt << ' ' << k << ' ' << val << '\n';
         if (cnt == k)
             val = root->val;
         pre(root->right, k, val);
