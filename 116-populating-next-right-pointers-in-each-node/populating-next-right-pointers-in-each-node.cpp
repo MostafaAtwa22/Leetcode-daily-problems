@@ -29,7 +29,6 @@ public:
             for (int i = 0; i < n; i++) {
                 node = q.front();
                 q.pop();
-                node->next = NULL;
                 if (i < n - 1)
                     node->next = q.front();
                 if (node->left)
