@@ -35,17 +35,7 @@ public:
             }
             level++;
         }
-        if (mp[x].first == NULL)
-            cout << "NULL ";
-        else
-            cout << mp[x].first->val << ' ';
-
-        if (mp[y].first == NULL)
-            cout << "NULL\n";
-        else
-            cout << mp[y].first->val << '\n';
         
-        cout << mp[x].second << ' ' << mp[y].second;
         return mp[x].first != mp[y].first && mp[x].second == mp[y].second;
     }
 };
