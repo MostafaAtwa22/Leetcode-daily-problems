@@ -10,14 +10,15 @@
  * };
  */
 class Solution {
+public:
     bool check(TreeNode * l, TreeNode * r) {
         if (!l && !r)
             return true;
-        if ((!r && l ) || (r && !l) || (r->val != l->val))
+        else if ((!l && r) || (l && !r) || l->val != r->val)
             return false;
         return check(l->left, r->right) && check(l->right, r->left);
     }
-public:
+
     bool isSymmetric(TreeNode* root) {
         if (!root)
             return true;
