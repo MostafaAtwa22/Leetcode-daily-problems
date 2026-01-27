@@ -10,33 +10,22 @@
  * };
  */
 class Solution {
-void pre (TreeNode * root, vector<int> & a) {
-    if (!root)
-        return;
-    a.push_back(root->val);
-    pre(root->left, a);
-    pre(root->right, a);
-}
-void right(TreeNode * root, int t) {
-    if (!root)
-        return;
-    if (root->right == NULL) {
-        TreeNode * n = new TreeNode (t);
-        root->right = n;
-        return;
-    }
-    right(root->right, t);
-}
 public:
+    TreeNode* mostLR(TreeNode * root) {
+        if (!root->right)
+            return root;
+        return mostLR(root->right);
+    }
     void flatten(TreeNode* root) {
         if (!root)
             return;
-        vector<int> a;
-        pre(root, a);
-        root->left = root->right = NULL;
-        for (int i = 1; i < a.size(); i++) {
-            right(root, a[i]);
+        if (root->left) {
+            TreeNode* n = mostLR(root->left);
+            n->right = root->right;
+            root->right = root->left;
+            root->left = NULL;
         }
-
+        flatten(root->left);
+        flatten(root->right);
     }
 };
