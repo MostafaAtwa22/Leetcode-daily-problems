@@ -10,26 +10,17 @@
  * };
  */
 class Solution {
-    int big(TreeNode * root, int val) {
-        if (!root)
-            return val;
-        val = max(val, root->val);
-        return max(big (root->left, val),
-        big (root->right, val));
-    }
-    int small(TreeNode * root, int val) {
-        if (!root)
-            return val;
-        val = min(val, root->val);
-        return min(small (root->left, val),
-        small (root->right, val));
-    }
 public:
-    bool isValidBST(TreeNode* root) {
+    bool valid(TreeNode * root, long long min, long long max) {
         if (!root)
             return true;
-        if ((root->left && big(root->left, root->left->val) >= root->val) || (root->right && small(root->right, root->right->val) <= root->val))
+        if (root->val >= max || root->val <= min)
             return false;
-        return isValidBST(root->left) && isValidBST(root->right);
+        return valid(root->left, min, root->val) 
+            && valid(root->right, root->val, max);
+    }
+    bool isValidBST(TreeNode* root) {
+        long long min = -1e15, max = 1e15;
+        return valid(root, min, max);
     }
 };
