@@ -16,6 +16,7 @@ public:
             return false;
         if (!root->left && !root->right)
             return t == root->val;
-        return hasPathSum(root->left, t - root->val) || hasPathSum(root->right, t - root->val);
+        return hasPathSum(root->left, t - root->val)
+        || hasPathSum(root->right, t - root->val);
     }
 };
