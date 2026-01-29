@@ -11,19 +11,17 @@
  */
 class Solution {
 public:
-    int sum = 0;
-    void pre(TreeNode * root, int val) {
+    int pre(TreeNode * root, int val) {
         if (!root) 
-            return;
+            return 0 ;
 
         val = val * 10 + root->val;
         if (!root->left && !root->right) 
-            sum += val;
-        pre(root->left, val);
-        pre(root->right, val);
+            return val;
+        
+        return pre(root->left, val) + pre(root->right, val);
     }
     int sumNumbers(TreeNode* root) {  
-        pre(root, 0);
-        return sum;      
+        return pre(root, 0);
     }
 };
