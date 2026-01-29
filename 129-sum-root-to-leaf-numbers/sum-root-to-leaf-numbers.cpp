@@ -13,14 +13,12 @@ class Solution {
 public:
     int sum = 0;
     void pre(TreeNode * root, int val) {
-        if (!root) {
+        if (!root) 
             return;
-        }
+
         val = val * 10 + root->val;
-        if (!root->left && !root->right) {
-            cout << val << '\n';
+        if (!root->left && !root->right) 
             sum += val;
-        }
         pre(root->left, val);
         pre(root->right, val);
     }
