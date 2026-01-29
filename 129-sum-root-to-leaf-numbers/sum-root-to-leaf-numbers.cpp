@@ -10,18 +10,22 @@
  * };
  */
 class Solution {
-int sum(TreeNode * root, int s) {
-    if (!root) {
-        return 0;
-    }
-    s = s * 10 + root->val;
-    if (!root->left && !root->right) {
-        return s;
-    }
-    return sum(root->left, s) + sum(root->right, s);
-}
 public:
-    int sumNumbers(TreeNode* root) {        
-        return sum(root, 0);
+    int sum = 0;
+    void pre(TreeNode * root, int val) {
+        if (!root) {
+            return;
+        }
+        val = val * 10 + root->val;
+        if (!root->left && !root->right) {
+            cout << val << '\n';
+            sum += val;
+        }
+        pre(root->left, val);
+        pre(root->right, val);
+    }
+    int sumNumbers(TreeNode* root) {  
+        pre(root, 0);
+        return sum;      
     }
 };
