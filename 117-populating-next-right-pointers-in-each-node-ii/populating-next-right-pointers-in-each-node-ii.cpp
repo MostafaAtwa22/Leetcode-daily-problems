@@ -24,18 +24,12 @@ public:
         queue<Node*> q;
         q.push(root);
         while(!q.empty()) {
-            Node* prev = NULL;
             int n = q.size();
             for (int i = 0; i < n; i++) {
                 Node * node = q.front();
                 q.pop();
-                if (i == n - 1) 
-                    node->next = NULL;
-                if (i >= 1 && prev) {
-                    cout << node->val << ' ' << prev->val << '\n';
-                    prev->next = node;
-                }
-                prev = node;
+                if (i < n - 1) 
+                    node->next = q.front();
                 if (node->left)
                     q.push(node->left);
                 if (node->right)
