@@ -15,7 +15,6 @@ public:
     void dfs(vector<vector<char>>& a, int curx, int cury, bool& flg)
     {
         vis[curx][cury] = 1;
-        cout << curx << ' ' << cury << '\n';
         if (curx == 0 || curx == n - 1 || cury == 0 || cury == m - 1) {
             flg = false;
             return;
@@ -50,8 +49,6 @@ public:
                 if (a[i][j] == 'O' && !vis[i][j]) {
                     bool flg = true;
                     dfs(a, i, j, flg);
-                    cout << i << " " << j << ' ';
-                    (flg == true) ? cout << "True\n" : cout << "False" << '\n';
                     if (flg == true)
                         dfs(a, i, j);
                     else
