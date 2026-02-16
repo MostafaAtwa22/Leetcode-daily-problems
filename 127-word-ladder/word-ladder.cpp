@@ -1,39 +1,57 @@
 class Solution {
 public:
-    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
-        unordered_set<string> st(wordList.begin(), wordList.end());
-        if (!st.count(endWord)) return 0;
+    unordered_map<string, vector<string>> g;
+    unordered_map<string, bool> vis;
 
-        queue<string> q;
-        q.push(beginWord);
-        int len = 1;
-
-        while (!q.empty()) {
-            int sz = q.size();
-
-            while (sz--) {
-                string cur = q.front();
-                q.pop();
-
-                if (cur == endWord)
-                    return len;
-
-                for (int i = 0; i < cur.size(); i++) {
-                    char old = cur[i];
-                    for (char ch = 'a'; ch <= 'z'; ch++) {
-                        if (ch == old) continue;
-                        cur[i] = ch;
-
-                        if (st.count(cur)) {
-                            q.push(cur);
-                            st.erase(cur); 
-                        }
-                    }
-                    cur[i] = old;
+    bool check (string s1, string s2) {
+        if (s1.size() != s2.size())
+            return false;
+        int cnt = 0;
+        for (int i = 0; i < s1.size(); i++)
+            if (s1[i] != s2[i]) 
+                cnt++;
+        return cnt == 1;
+    }
+    int BFS (string from, string to)
+    {
+        queue<pair<string, int>> q;
+        q.push({from, 1});
+        while (!q.empty())
+        {
+            string node = q.front().first;
+            int dist = q.front().second;
+            q.pop();
+            vis[node] = 1;
+            if (node == to)
+                return dist;
+            for (auto child : g[node])
+            {
+                if (!vis[child])
+                {
+                    q.push({child, dist + 1});
                 }
             }
-            len++;
         }
         return 0;
+    }
+    int ladderLength(string from, string to, vector<string>& a) {
+        unordered_map<string, bool> mp;
+        mp[from] = true;
+        vector<string> v;
+        v.push_back(from);
+        for (auto i : a) {
+            if (!mp[i])
+                v.push_back(i);
+            mp[i] = true;
+        }
+        for (int i = 0; i < v.size(); i++) {
+            for (int j = i + 1; j < v.size(); j++) {
+                if (check(v[i], v[j])) {  
+                    g[v[i]].push_back(v[j]);
+                    g[v[j]].push_back(v[i]);
+                }
+            }
+        }
+        return BFS(from, to);
     }
 };
