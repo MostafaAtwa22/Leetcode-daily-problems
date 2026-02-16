@@ -1,57 +1,34 @@
 class Solution {
 public:
-    unordered_map<string, vector<string>> g;
-    unordered_map<string, bool> vis;
+    int ladderLength(string from, string to, vector<string>& a) {
+        unordered_set<string> g(a.begin(), a.end());
 
-    bool check (string s1, string s2) {
-        if (s1.size() != s2.size())
-            return false;
-        int cnt = 0;
-        for (int i = 0; i < s1.size(); i++)
-            if (s1[i] != s2[i]) 
-                cnt++;
-        return cnt == 1;
-    }
-    int BFS (string from, string to)
-    {
+        if (!g.count(to))
+            return 0;
         queue<pair<string, int>> q;
         q.push({from, 1});
-        while (!q.empty())
-        {
-            string node = q.front().first;
+        unordered_map<string, bool> vis;
+        vis[from] = 1;
+        while (!q.empty()) {
+            string u = q.front().first;
             int dist = q.front().second;
             q.pop();
-            vis[node] = 1;
-            if (node == to)
+            if (u == to)
                 return dist;
-            for (auto child : g[node])
-            {
-                if (!vis[child])
-                {
-                    q.push({child, dist + 1});
+            for (int i = 0; i < u.size(); i++) {
+                char org = u[i];
+                for (char c = 'a'; c <= 'z'; c++) {
+                    if (org == c)
+                        continue;
+                    u[i] = c;
+                    if (!vis[u] && g.count(u)) {
+                        vis[u] = 1;
+                        q.push({u, dist + 1});
+                    }
                 }
+                u[i] = org;
             }
         }
         return 0;
-    }
-    int ladderLength(string from, string to, vector<string>& a) {
-        unordered_map<string, bool> mp;
-        mp[from] = true;
-        vector<string> v;
-        v.push_back(from);
-        for (auto i : a) {
-            if (!mp[i])
-                v.push_back(i);
-            mp[i] = true;
-        }
-        for (int i = 0; i < v.size(); i++) {
-            for (int j = i + 1; j < v.size(); j++) {
-                if (check(v[i], v[j])) {  
-                    g[v[i]].push_back(v[j]);
-                    g[v[j]].push_back(v[i]);
-                }
-            }
-        }
-        return BFS(from, to);
     }
 };
