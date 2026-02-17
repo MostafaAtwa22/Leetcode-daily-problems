@@ -1,66 +1,48 @@
-struct PairHash {
-    size_t operator()(const pair<int,int>& p) const {
-        return hash<int>()(p.first) ^ (hash<int>()(p.second) << 1);
-    }
-};
-
 class Solution {
 public:
-    int snakesAndLadders(vector<vector<int>>& a) {
-        int n = a.size(), m = a[0].size();
-        unordered_map<int, pair<int, int>> mp;
-        unordered_map<pair<int, int>, int, PairHash> val;
+    int snakesAndLadders(vector<vector<int>>& board) {
+        int n = board.size();
 
-        int num = 1;
-        bool flg = true;
+        auto getPos = [&](int num) {
+            int r = (num - 1) / n;
+            int c = (num - 1) % n;
+            int row = n - 1 - r;
+            if (r % 2 == 1)
+                c = n - 1 - c;
+            return pair<int,int>{row, c};
+        };
 
-        for (int i = n - 1; i >= 0; i--) {
-            if (flg) {
-                for (int j = 0; j < m; j++) {
-                    mp[num] = {i, j};
-                    if (a[i][j] != -1)
-                        val[{i, j}] = a[i][j];
-                    a[i][j] = num++;
-                }
-            } else {
-                for (int j = m - 1; j >= 0; j--) {
-                    mp[num] = {i, j};
-                    if (a[i][j] != -1)
-                        val[{i, j}] = a[i][j];
-                    a[i][j] = num++;
-                }
-            }
-            flg = !flg;
-        }
-
-        queue<pair<int,int>> q; // {value, distance}
-        q.push({1, 0});
-
-        unordered_map<int, bool> vis;
+        vector<bool> vis(n * n + 1, false);
+        queue<int> q;
+        q.push(1);
         vis[1] = true;
 
+        int moves = 0;
+
         while (!q.empty()) {
-            auto [value, dis] = q.front();
-            q.pop();
+            int sz = q.size();
+            while (sz--) {
+                int cur = q.front();
+                q.pop();
 
-            if (value == n * m)
-                return dis;
+                if (cur == n * n)
+                    return moves;
 
-            for (int i = 1; i <= 6; i++) {
-                int nxt = value + i;
-                if (nxt > n * m) continue;
+                for (int d = 1; d <= 6; d++) {
+                    int nxt = cur + d;
+                    if (nxt > n * n) continue;
 
-                int r = mp[nxt].first;
-                int c = mp[nxt].second;
+                    auto [r, c] = getPos(nxt);
+                    if (board[r][c] != -1)
+                        nxt = board[r][c];
 
-                if (val.count({r, c}))
-                    nxt = val[{r, c}];
-
-                if (!vis[nxt]) {
-                    vis[nxt] = true;
-                    q.push({nxt, dis + 1});
+                    if (!vis[nxt]) {
+                        vis[nxt] = true;
+                        q.push(nxt);
+                    }
                 }
             }
+            moves++;
         }
         return -1;
     }
