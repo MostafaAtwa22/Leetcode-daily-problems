@@ -1,9 +1,9 @@
 class DSU {
 private:
 
-public:
     vector<int> parent;
     vector<int> group;
+public:
     DSU(int n) {
         parent.resize(n);
         group.resize(n);
@@ -89,7 +89,7 @@ public:
 
             int size = 1;
             for (int p : parents)
-                size += d.group[p];
+                size += d.getGroupSize(p);
 
             ans = max(ans, size);
         }
