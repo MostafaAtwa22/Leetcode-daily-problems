@@ -1,3 +1,9 @@
+struct PairHash {
+    size_t operator()(const pair<int,int>& p) const {
+        return ((size_t)p.first << 32) ^ p.second;
+    }
+};
+
 class DSU {
 private:
     vector<long long> parent;
@@ -5,9 +11,9 @@ private:
 
 public:
     DSU(int n) {
-        parent.resize(n);
-        group.resize(n);
-        for (int i = 0; i < n; i++) {
+        parent.resize(n + 1);
+        group.resize(n + 1);
+        for (int i = 0; i <= n; i++) {
             parent[i] = i;
             group[i] = 1;
         }
@@ -27,7 +33,6 @@ public:
         u = getParent(u);
         v = getParent(v);
         if (u == v) return;
-
         parent[u] = v;
         group[v] += group[u];
     }
@@ -40,41 +45,36 @@ public:
 class Solution {
 public:
     int removeStones(vector<vector<int>>& q) {
-        unordered_map<int, vector<int>> row, col;
-        unordered_map<long long, int> id;
+        unordered_map<int, vector<pair<int, int>>> row, col;
+        unordered_map<pair<int, int>, int, PairHash> mp;
 
         int idx = 0;
         for (auto &s : q) {
-            long long key = ((long long)s[0] << 32) | s[1];
-            id[key] = idx++;
+            mp[{s[0], s[1]}] = idx++;
+            row[s[0]].push_back({s[0], s[1]});
+            col[s[1]].push_back({s[0], s[1]});
         }
 
         DSU d(q.size());
 
-        for (auto &s : q) {
-            row[s[0]].push_back(id[((long long)s[0] << 32) | s[1]]);
-            col[s[1]].push_back(id[((long long)s[0] << 32) | s[1]]);
-        }
-
         for (auto &i : row) {
             auto &v = i.second;
             for (int j = 1; j < v.size(); j++) {
-                if (!d.areFriends(v[j], v[j - 1]))
-                    d.makeFriends(v[j], v[j - 1]);
+                d.makeFriends(mp[v[j]], mp[v[j - 1]]);
             }
         }
 
         for (auto &i : col) {
             auto &v = i.second;
             for (int j = 1; j < v.size(); j++) {
-                if (!d.areFriends(v[j], v[j - 1]))
-                    d.makeFriends(v[j], v[j - 1]);
+                d.makeFriends(mp[v[j]], mp[v[j - 1]]);
             }
         }
 
         set<int> roots;
-        for (int i = 0; i < q.size(); i++)
-            roots.insert(d.getParent(i));
+        for (auto &s : q) {
+            roots.insert(d.getParent(mp[{s[0], s[1]}]));
+        }
 
         int cnt = 0;
         for (auto r : roots)
