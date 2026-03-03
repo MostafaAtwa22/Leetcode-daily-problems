@@ -1,41 +1,31 @@
 class Solution {
 public:
-    vector<int> ans;
-    vector<int> g[10000];
-    unordered_map<int, bool> vis;
-    void dfs(int u) {
-        vis[u] = true;
-        for (auto v : g[u]) {
-            if (!vis[v])
-                dfs(v);
-        }
-        ans.push_back(u);
-    }
-    int visitedDir[10000];
-    bool dfsDir (int node)
-    {
-        visitedDir[node] = 1;
-        bool res = false;
-        for (auto child : g[node])
-        {
-            if (visitedDir[child] == 1) 
-                return true;
-            else if (visitedDir[child] == 0)
-                res |= dfsDir(child);
-        }
-        visitedDir[node] = 2; 
-        return res;
-    }
     vector<int> findOrder(int n, vector<vector<int>>& a) {
-        for (int i = 0; i < a.size(); i++)
+        vector<int> g[n];
+        vector<int> inDeg(n, 0);
+        for (int i = 0; i < a.size(); i++) {
             g[a[i][0]].push_back(a[i][1]);
-        for (int i = 0; i < n; i++) {
-            if (!vis[i]) {
-                if (dfsDir(i))
-                    return {};
-                dfs(i);
+            inDeg[a[i][1]]++;
+        }
+        priority_queue<int, vector<int>, greater<int>> q; 
+        for (int i = 0; i < n; i++)
+            if (!inDeg[i])
+                q.push(i);
+        vector<int> ans;
+        while (!q.empty()) {
+            int u = q.top();
+            q.pop();
+            ans.push_back(u);
+            for (auto v : g[u]) {
+                inDeg[v]--;
+                if (!inDeg[v])
+                    q.push(v);
             }
         }
-        return ans;
+        if (ans.size() == n) {
+            reverse(ans.begin(), ans.end());
+            return ans;
+        }
+        return {};
     }
 };
