@@ -1,22 +1,21 @@
 class Solution {
 public:
+    bool checkright(vector<int> & a, int r, int n, int val) {
+        for (int i = r; i < n; i++)
+            if (a[i] < val)
+                return true;
+        return false;
+    }
     int findMin(vector<int>& a) {
         int n = a.size();
-        vector<int> arr;
-        unordered_map<int, bool> mp;
-        for (auto i : a) {
-            if (!mp[i]) 
-                arr.push_back(i);
-            mp[i] = true;
-        }
-        int l = 0, r = arr.size() - 1, m;
+        int l = 0, r = n - 1, m;
         while (l < r) {
             m = l + (r - l) / 2;
-            if (arr[m] > arr[r])
+            if (checkright(a, m + 1, n, a[m]))  
                 l = m + 1;
             else
                 r = m;
         }
-        return arr[r];
+        return a[r];
     }
 };
