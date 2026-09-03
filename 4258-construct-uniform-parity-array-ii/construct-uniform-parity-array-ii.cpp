@@ -1,19 +1,16 @@
 class Solution {
 public:
     bool uniformArray(vector<int>& a) {
-        set<int> odd, even;
+        int even = INT_MAX, odd = INT_MAX;
         for (auto i : a) {
             if (i & 1)
-                odd.insert(i);
+                odd = min(odd, i);
             else
-                even.insert(i);
+                even = min(even, i);
         }
 
-        if (even.empty() || odd.empty()) return true;
+        if (even == INT_MAX || odd == INT_MAX) return true;
 
-        int smallOdd = *odd.begin();
-        int smallEven = *even.begin();
-
-        return smallEven > smallOdd;
+        return even > odd;
     }
 };
