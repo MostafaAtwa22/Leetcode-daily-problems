@@ -1,32 +1,41 @@
 class Solution {
 public:
-    vector<string> a;
-    void fun(int n, string s, int open, int close) {
-        if (open == close && close == n) {
-            a.push_back(s);
+    vector<string> ans;
+    bool valid(string s) {
+        stack<char> st;
+        for (auto i : s) {
+            if (i == '(')
+                st.push(i);
+            else {
+                if (st.empty())
+                    return false;
+                st.pop();
+            }
+        }
+        return st.empty();
+    }
+    void sol(string s, int n) {
+        if (n == 0) {
+            if (valid(s)) {
+
+                ans.push_back(s);
+            }
             return;
         }
-        if (open < n) {
-            // do
-            s += '(';
-            // rec
-            fun(n, s, open + 1, close);
-            // undo
-            s.pop_back();
-        }
-        if (open > close) {
-            // do
-            s += ')';
-            // rec
-            fun(n, s, open, ++close);
-            // undo
-            s.pop_back();
-        }
+        
+        // do 
+        s.push_back('(');
+        // rec
+        sol(s, n - 1);
+        // undo
+        s.pop_back();
+
+        s.push_back(')');
+        sol(s, n - 1);
+        s.pop_back();
     }
-
     vector<string> generateParenthesis(int n) {
-        fun(n, "", 0, 0);
-
-        return a;
+        sol("", n * 2);
+        return ans;
     }
 };
